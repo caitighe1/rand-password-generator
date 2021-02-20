@@ -1,41 +1,40 @@
 var generateBtn = document.querySelector("#generate");
 
-// Variable Arrays for character confirmation //
+// Created Arrays //
 
-var allUpper = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-var allLower = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-var number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-var specialChar =  ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "\:", "\;", " < ", "=", " > ", " ? ", "@", "[", "\\", "]", " ^ ", "_", "`", "{", "|", "}", "~"];
+var allUpperCase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+var allLowerCase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+var specialChars =  ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", "\:", "\;", " < ", "=", " > ", " ? ", "@", "[", "\\", "]", " ^ ", "_", "`", "{", "|", "}", "~"];
 
-// Criteria options
+
 var confirmLength;
 var confirmSpecialChar;
 var confirmNumber;
 var confirmUpper;
 var confirmLower;
 
-// parseInt - this will 
+// used parseInt to ensure that input is numeric //
 
 function userOptions () {
-  var confirmLength = parseInt(prompt("Your password must be between 8 and 128 characters. Please enter a whole number to set the length of your password."));
+  var confirmLength = parseInt(prompt("Please enter a number 8-128"));
    
-// break into separate statements
-// adding return ends the function
+// if statements to create prompts //
 
    if (isNaN(confirmLength) === true) {
-     alert("Please choose a valid number.");
+     alert("Please choose a number 8-128");
      return 
    }
    if (confirmLength < 8) {
-     alert("Please enter a number greater than 8.");
+     alert("Please enter a number greater than 8");
      return
    }
    if (confirmLength > 128) {
-     alert("Please enter a number less than 128.");
+     alert("Please enter a number less than 128");
      return
    }
-  // Once length is confirmed, user can add criteria
-  // making a confirm as a var will hold the response
+  
+   //confirmation of all parameters //
    
      confirmUpper = confirm("Do you wish to include Uppercase letters? Click OK to confirm.");
      confirmLower = confirm("Do you wish to include Lowercase letters? Click OK to confirm.");
@@ -43,13 +42,13 @@ function userOptions () {
      confirmSpecialChar = confirm("Do you wish to include Special Characters such as '!' or '%'? Click OK to confirm.");
    
 
-  //  If the person selects nothing for criteria
+  // if there is no input on form //
   if (!confirmUpper && !confirmLower && !confirmNumber && !confirmSpecialChar) {
     alert("You must select at least one criteria option. For the highest security, select all four options.");
     return
     }
     
-// Object for criteria options
+
     var userCriteria = {
       confirmLength:confirmLength,
       confirmUpper:confirmUpper,
@@ -60,7 +59,7 @@ function userOptions () {
     return userCriteria;
   }   
 
-  // function is created to call randomly pull a character from the arrays
+  // took format from google for math.random function
   function randomChar(array) {
     var index = Math.floor(Math.random() * array.length);
     var element = array[index];
@@ -68,7 +67,7 @@ function userOptions () {
     return element;
   }
   
-  // 3 arrays 1- for password 2- for chosen char 3- characters to include
+  
   function generatePassword() {
     var userCriteria = userOptions();
   
@@ -76,8 +75,7 @@ function userOptions () {
     var chosenChar = [];
     var charsInc = [];
   
-  // use . to get to an objects properties
-  // make an if statement for each character option
+  // used concat operator to add and push new characters to next part of loop //
     if (userCriteria.confirmSpecialChar) {
       charsInc = charsInc.concat(specialChar);
       chosenChar.push(randomChar(specialChar));
@@ -97,21 +95,26 @@ function userOptions () {
       charsInc = charsInc.concat(allLower);
       chosenChar.push(randomChar(allLower));
     }
-  // created the loop to check length. If greater than zero keep checking
+  
+  
+    // used for making sure loop is more than 0 //
+
     for(var i=0; i < userCriteria.confirmLength; i++) {
       var possibleChar = randomChar(charsInc);
       password.push(possibleChar);
     }
-  // This loop should match the password with the length chosen in confirmLength var.
+    
+    // ensures that character length chosen and output is the same //
+    
     for(var i=0; i < chosenChar.length; i++) {
       password[i] = chosenChar[i];
     }
-  // Include a return call? 
+  
+    //.join creates the character set //
     return password.join(" ");
       
   }
   
-  // Write password to the #password input
   function writePassword() {
     var password = generatePassword();
     var passwordText = document.querySelector("#password");
@@ -122,5 +125,5 @@ function userOptions () {
   
   }
   
-  // Add event listener to generate button
+
   generateBtn.addEventListener("click", writePassword);
